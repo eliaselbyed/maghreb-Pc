@@ -1,0 +1,6 @@
+{
+  "name": "Maghreb PC Gaming Store",
+  "description": "A professional, sleek, dark-themed e-commerce platform for premium gaming gear with neon accents and smooth animations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
