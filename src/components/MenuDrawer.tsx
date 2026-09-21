@@ -8,6 +8,7 @@ interface MenuDrawerProps {
   onClose: () => void;
   selectedCategory: string | null;
   onSelectCategory: (category: string | null) => void;
+  onOpenAdmin?: () => void;
 }
 
 export function MenuDrawer({
@@ -15,6 +16,7 @@ export function MenuDrawer({
   onClose,
   selectedCategory,
   onSelectCategory,
+  onOpenAdmin,
 }: MenuDrawerProps) {
   useEffect(() => {
     if (!isOpen) return;
@@ -145,7 +147,20 @@ export function MenuDrawer({
               </div>
 
               {/* Footer CTA */}
-              <div className="p-5 border-t border-white/10 bg-zinc-900/30">
+              <div className="p-5 border-t border-white/10 bg-zinc-900/30 space-y-2">
+                {onOpenAdmin && (
+                  <button
+                    onClick={() => {
+                      onClose();
+                      onOpenAdmin();
+                    }}
+                    className="w-full flex items-center justify-center gap-2 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 py-2.5 px-4 font-bold text-xs uppercase tracking-wider transition-colors"
+                  >
+                    <ShieldCheck className="h-3.5 w-3.5" />
+                    <span>Supabase Admin Panel</span>
+                  </button>
+                )}
+
                 <a
                   href="tel:+212770519490"
                   className="w-full flex items-center justify-center gap-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-white/10 text-white py-2.5 px-4 font-bold text-xs uppercase tracking-wider transition-colors"

@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Package } from 'lucide-react';
 import { Product } from '../types';
 import type { JSX, Key } from 'react';
 
@@ -43,14 +43,21 @@ export function ProductCard({
       )}
 
       {/* Image Container */}
-      <div className="relative aspect-square overflow-hidden bg-zinc-950 p-3 sm:p-6">
+      <div className="relative aspect-square overflow-hidden bg-zinc-950 p-3 sm:p-6 flex items-center justify-center">
         <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-10" />
-        <img
-          src={product.image}
-          alt={product.name}
-          referrerPolicy="no-referrer"
-          className="h-full w-full object-contain object-center transition-transform duration-500 group-hover:scale-105"
-        />
+        {product.image ? (
+          <img
+            src={product.image}
+            alt={product.name}
+            referrerPolicy="no-referrer"
+            className="h-full w-full object-contain object-center transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <div className="flex flex-col items-center justify-center text-zinc-700">
+            <Package className="w-10 h-10 mb-1" />
+            <span className="text-[10px] uppercase font-bold text-zinc-600">No Image</span>
+          </div>
+        )}
         
         {/* Quick Action Buttons - Appears on Hover */}
         <div className="absolute bottom-2 sm:bottom-3 left-0 right-0 z-20 flex translate-y-8 justify-center gap-2 px-3 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 hidden sm:flex">

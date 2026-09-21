@@ -7,6 +7,7 @@ interface NavbarProps {
   onOpenCart: () => void;
   onOpenMenu: () => void;
   onOpenUser: () => void;
+  onOpenAdmin?: () => void;
   searchQuery: string;
   onSearchChange: (query: string) => void;
   onResetFilters: () => void;
@@ -19,6 +20,7 @@ export function Navbar({
   onOpenCart,
   onOpenMenu,
   onOpenUser,
+  onOpenAdmin,
   searchQuery,
   onSearchChange,
   onResetFilters,
@@ -128,9 +130,22 @@ export function Navbar({
             onClick={onOpenUser}
             className="p-2 rounded-lg text-zinc-400 transition-colors hover:text-cyan-400 hover:bg-zinc-900"
             aria-label="Customer service & profile hub"
+            title="Customer Hub"
           >
             <User className="h-5 w-5" />
           </button>
+
+          {/* Admin Panel Quick Link */}
+          {onOpenAdmin && (
+            <button
+              onClick={onOpenAdmin}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-400 hover:bg-zinc-900 border border-cyan-500/20 bg-cyan-500/5 transition-all"
+              aria-label="Open Admin Panel"
+              title="Admin Panel (/admin)"
+            >
+              <span className="font-mono text-[11px] uppercase tracking-wider text-cyan-400">Admin</span>
+            </button>
+          )}
 
           {/* Shopping Cart Button */}
           <button

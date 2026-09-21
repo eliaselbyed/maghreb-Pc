@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Check, ShoppingBag, X } from 'lucide-react';
+import { Check, ShoppingBag, X, RefreshCw } from 'lucide-react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Categories } from './components/Categories';
@@ -10,17 +10,29 @@ import { Footer } from './components/Footer';
 import { CartDrawer } from './components/CartDrawer';
 import { MenuDrawer } from './components/MenuDrawer';
 import { UserModal } from './components/UserModal';
+import { AdminPanel } from './components/AdminPanel';
 import { products } from './data';
 import { CartItem, Product } from './types';
+import { fetchProducts, isSupabaseConfigured } from './supabase';
 
-// Default initial items to match the "3" count shown in the user's top bar
-const DEFAULT_CART: CartItem[] = [
-  { product: products[0], quantity: 1 }, // ATTACK SHARK X11
-  { product: products[8], quantity: 1 }, // ATTACK SHARK X68 HE
-  { product: products[12], quantity: 1 }, // MICRO GM7
-];
+// Cart starts empty; only contains items the user adds
+const DEFAULT_CART: CartItem[] = [];
 
 export default function App() {
+  // Check if current URL matches /admin or #admin
+  const [isAdminView, setIsAdminView] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return (
+      window.location.pathname === '/admin' ||
+      window.location.pathname.startsWith('/admin') ||
+      window.location.hash === '#admin'
+    );
+  });
+
+  // Dynamic products fetched from Supabase only (no hardcoded fallback)
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [isFetchingFromSupabase, setIsFetchingFromSupabase] = useState<boolean>(true);
+
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchActive, setIsSearchActive] = useState(false);
@@ -30,12 +42,70 @@ export default function App() {
   const [isUserOpen, setIsUserOpen] = useState(false);
   const [addedToast, setAddedToast] = useState<{ name: string; id: number } | null>(null);
 
-  // Cart state with localStorage persistence
+  // Synchronize browser URL routing (/admin and #admin)
+  useEffect(() => {
+    const handleUrlChange = () => {
+      const isAdmin =
+        window.location.pathname === '/admin' ||
+        window.location.pathname.startsWith('/admin') ||
+        window.location.hash === '#admin';
+      setIsAdminView(isAdmin);
+    };
+
+    window.addEventListener('popstate', handleUrlChange);
+    window.addEventListener('hashchange', handleUrlChange);
+    return () => {
+      window.removeEventListener('popstate', handleUrlChange);
+      window.removeEventListener('hashchange', handleUrlChange);
+    };
+  }, []);
+
+  // Dynamically fetch products from Supabase 'products' table for the main storefront
+  useEffect(() => {
+    async function loadStorefrontProducts() {
+      if (isSupabaseConfigured) {
+        try {
+          setIsFetchingFromSupabase(true);
+          const remoteProducts = await fetchProducts();
+          setAllProducts(remoteProducts || []);
+        } catch (err) {
+          console.error('Could not fetch products from Supabase:', err);
+          setAllProducts([]);
+        } finally {
+          setIsFetchingFromSupabase(false);
+        }
+      } else {
+        setAllProducts([]);
+        setIsFetchingFromSupabase(false);
+      }
+    }
+    loadStorefrontProducts();
+  }, []);
+
+  // Open & Close Admin View Helpers
+  const handleOpenAdmin = () => {
+    setIsAdminView(true);
+    history.pushState(null, '', '/admin');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  };
+
+  const handleCloseAdmin = () => {
+    setIsAdminView(false);
+    history.pushState(null, '', '/');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  };
+
+  // Cart state with localStorage persistence (clears out old mock product items)
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     try {
       const saved = localStorage.getItem('maghreb_pc_cart');
       if (saved) {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          return parsed.filter(
+            (item) => item?.product?.id && item?.product?.name && !['m1', 'm2', 'm3', 'm4', 'm5', 'm6', 'm7', 'm8', 'k1', 'k2', 'k3', 'k4', 'mic1', 'mic2', 'a1', 'a2', 'o1', 'o2', 'o3'].includes(item.product.id)
+          );
+        }
       }
     } catch {
       // ignore JSON error
@@ -69,7 +139,7 @@ export default function App() {
       const hash = window.location.hash;
       if (hash.startsWith('#product-')) {
         const prodId = hash.replace('#product-', '');
-        const matched = products.find((p) => p.id === prodId);
+        const matched = allProducts.find((p) => p.id === prodId);
         if (matched) {
           if (selectedProductRef.current?.id !== matched.id) {
             savedScrollYRef.current = window.scrollY;
@@ -95,7 +165,7 @@ export default function App() {
     handleHash();
     window.addEventListener('hashchange', handleHash);
     return () => window.removeEventListener('hashchange', handleHash);
-  }, []);
+  }, [allProducts]);
 
   const totalCartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -229,7 +299,7 @@ export default function App() {
   const shouldHideTopSection = isSearchActive || searchQuery.trim().length > 0;
 
   // Filter products by category AND search query
-  const filteredProducts = products.filter((product) => {
+  const filteredProducts = allProducts.filter((product) => {
     const matchesCategory = selectedCategory
       ? product.category.toLowerCase() === selectedCategory.toLowerCase()
       : true;
@@ -241,6 +311,18 @@ export default function App() {
     return matchesCategory && matchesSearch;
   });
 
+  // If user navigated to /admin, render the full Supabase Admin Panel
+  if (isAdminView) {
+    return (
+      <AdminPanel
+        onBackToStore={handleCloseAdmin}
+        onProductsUpdated={(updated) => {
+          setAllProducts(updated);
+        }}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-zinc-950 text-white selection:bg-cyan-500/30">
       <Navbar
@@ -248,6 +330,7 @@ export default function App() {
         onOpenCart={() => setIsCartOpen(true)}
         onOpenMenu={() => setIsMenuOpen(true)}
         onOpenUser={() => setIsUserOpen(true)}
+        onOpenAdmin={handleOpenAdmin}
         searchQuery={searchQuery}
         onSearchChange={handleSearchChange}
         onResetFilters={handleResetFilters}
@@ -290,7 +373,10 @@ export default function App() {
                 }}
                 className="overflow-hidden"
               >
-                <Hero onSelectProduct={handleSelectProduct} />
+                <Hero
+                  featuredProduct={allProducts.length > 0 ? allProducts[0] : null}
+                  onSelectProduct={handleSelectProduct}
+                />
                 
                 <Categories
                   selectedCategory={selectedCategory}
@@ -341,13 +427,17 @@ export default function App() {
                       )}
                     </h2>
                     <p className="mt-1 text-xs sm:text-sm text-zinc-400">
-                      {searchQuery
+                      {isFetchingFromSupabase
+                        ? 'Fetching products from Supabase...'
+                        : searchQuery
                         ? `Found ${filteredProducts.length} matching item${filteredProducts.length === 1 ? '' : 's'}.`
                         : shouldHideTopSection
                         ? `Showing all ${filteredProducts.length} items. Type in search bar above to filter live.`
                         : selectedCategory
                         ? `Explore our collection of ${selectedCategory}s.`
-                        : 'The latest and greatest in gaming hardware.'}
+                        : allProducts.length > 0
+                        ? `Showing ${allProducts.length} live product${allProducts.length === 1 ? '' : 's'} from your database.`
+                        : 'Products added from your admin page will appear here live.'}
                     </p>
                   </div>
 
@@ -362,7 +452,21 @@ export default function App() {
                   )}
                 </div>
 
-                {filteredProducts.length > 0 ? (
+                {isFetchingFromSupabase ? (
+                  <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
+                    {[1, 2, 3, 4].map((n) => (
+                      <div
+                        key={n}
+                        className="rounded-xl border border-white/5 bg-zinc-900/40 p-4 animate-pulse flex flex-col gap-3"
+                      >
+                        <div className="aspect-square w-full rounded-lg bg-zinc-800/50" />
+                        <div className="h-4 w-3/4 rounded bg-zinc-800/60 mt-1" />
+                        <div className="h-3 w-1/2 rounded bg-zinc-800/40" />
+                        <div className="h-5 w-1/3 rounded bg-zinc-800/60 mt-2" />
+                      </div>
+                    ))}
+                  </div>
+                ) : filteredProducts.length > 0 ? (
                   <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
                     {filteredProducts.map((product, index) => (
                       <ProductCard
@@ -373,6 +477,22 @@ export default function App() {
                         onSelectProduct={handleSelectProduct}
                       />
                     ))}
+                  </div>
+                ) : allProducts.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-16 text-center border border-dashed border-white/10 rounded-2xl bg-zinc-900/30 px-4">
+                    <div className="w-14 h-14 mb-3 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+                      <ShoppingBag className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-base font-bold text-white">No products in store yet</h3>
+                    <p className="text-xs text-zinc-400 mt-1 max-w-sm leading-relaxed">
+                      Only products added from your Admin Panel will appear here. Add your first product in the admin dashboard to go live.
+                    </p>
+                    <button
+                      onClick={handleOpenAdmin}
+                      className="mt-4 rounded-xl bg-cyan-500 px-5 py-2.5 text-xs font-black text-zinc-950 hover:bg-cyan-400 transition-all uppercase tracking-wider shadow-[0_0_15px_rgba(34,211,238,0.25)]"
+                    >
+                      Open Admin Panel
+                    </button>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-16 text-center border border-dashed border-white/10 rounded-2xl bg-zinc-900/30">
@@ -404,7 +524,7 @@ export default function App() {
         </div>
       </main>
 
-      <Footer />
+      <Footer onOpenAdmin={handleOpenAdmin} />
 
       {/* Added to Cart Feedback Toast */}
       <AnimatePresence>
@@ -453,6 +573,7 @@ export default function App() {
         onClose={() => setIsMenuOpen(false)}
         selectedCategory={selectedCategory}
         onSelectCategory={handleCategorySelect}
+        onOpenAdmin={handleOpenAdmin}
       />
 
       <UserModal

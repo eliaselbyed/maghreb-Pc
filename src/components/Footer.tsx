@@ -1,6 +1,10 @@
 import { Zap } from 'lucide-react';
 
-export function Footer() {
+interface FooterProps {
+  onOpenAdmin?: () => void;
+}
+
+export function Footer({ onOpenAdmin }: FooterProps = {}) {
   return (
     <footer className="border-t border-white/5 bg-zinc-950 pt-16 pb-8 mt-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -32,12 +36,21 @@ export function Footer() {
 
           {/* Links 2 */}
           <div>
-            <h4 className="text-sm font-bold uppercase tracking-wider text-white mb-4">Support</h4>
+            <h4 className="text-sm font-bold uppercase tracking-wider text-white mb-4">Support & Admin</h4>
             <ul className="space-y-3 text-sm text-zinc-400">
               <li><a href="#" className="hover:text-cyan-400 transition-colors">Track Order</a></li>
               <li><a href="#" className="hover:text-cyan-400 transition-colors">Returns & Refunds</a></li>
               <li><a href="#" className="hover:text-cyan-400 transition-colors">Warranty Info</a></li>
-              <li><a href="#" className="hover:text-cyan-400 transition-colors">Contact Us</a></li>
+              {onOpenAdmin && (
+                <li>
+                  <button
+                    onClick={onOpenAdmin}
+                    className="hover:text-cyan-400 text-cyan-500/80 transition-colors font-medium flex items-center gap-1"
+                  >
+                    <span>Supabase Admin Portal</span>
+                  </button>
+                </li>
+              )}
             </ul>
           </div>
 

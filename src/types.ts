@@ -15,6 +15,7 @@ export interface Product {
   rating?: number;
   reviewsCount?: number;
   inStock?: boolean;
+  stockStatus?: 'in_stock' | 'out_of_stock' | string;
   specs?: { label: string; value: string }[];
 }
 
