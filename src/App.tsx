@@ -330,7 +330,6 @@ export default function App() {
         onOpenCart={() => setIsCartOpen(true)}
         onOpenMenu={() => setIsMenuOpen(true)}
         onOpenUser={() => setIsUserOpen(true)}
-        onOpenAdmin={handleOpenAdmin}
         searchQuery={searchQuery}
         onSearchChange={handleSearchChange}
         onResetFilters={handleResetFilters}
@@ -483,16 +482,10 @@ export default function App() {
                     <div className="w-14 h-14 mb-3 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
                       <ShoppingBag className="w-6 h-6" />
                     </div>
-                    <h3 className="text-base font-bold text-white">No products in store yet</h3>
+                    <h3 className="text-base font-bold text-white">No products found</h3>
                     <p className="text-xs text-zinc-400 mt-1 max-w-sm leading-relaxed">
-                      Only products added from your Admin Panel will appear here. Add your first product in the admin dashboard to go live.
+                      Products will appear here once loaded.
                     </p>
-                    <button
-                      onClick={handleOpenAdmin}
-                      className="mt-4 rounded-xl bg-cyan-500 px-5 py-2.5 text-xs font-black text-zinc-950 hover:bg-cyan-400 transition-all uppercase tracking-wider shadow-[0_0_15px_rgba(34,211,238,0.25)]"
-                    >
-                      Open Admin Panel
-                    </button>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-16 text-center border border-dashed border-white/10 rounded-2xl bg-zinc-900/30">
@@ -524,7 +517,7 @@ export default function App() {
         </div>
       </main>
 
-      <Footer onOpenAdmin={handleOpenAdmin} />
+      <Footer />
 
       {/* Added to Cart Feedback Toast */}
       <AnimatePresence>
@@ -573,7 +566,6 @@ export default function App() {
         onClose={() => setIsMenuOpen(false)}
         selectedCategory={selectedCategory}
         onSelectCategory={handleCategorySelect}
-        onOpenAdmin={handleOpenAdmin}
       />
 
       <UserModal

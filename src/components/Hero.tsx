@@ -83,7 +83,7 @@ export function Hero({ featuredProduct, onSelectProduct }: HeroProps) {
             {featuredProduct ? (
               <div
                 onClick={() => onSelectProduct && onSelectProduct(featuredProduct)}
-                className="group relative aspect-square w-full rounded-2xl overflow-hidden border border-white/10 bg-zinc-900 shadow-2xl cursor-pointer hover:border-cyan-500/50 transition-all p-4 flex flex-col justify-between"
+                className="group relative aspect-square w-full rounded-2xl overflow-hidden border border-white/10 bg-zinc-950 shadow-2xl cursor-pointer hover:border-cyan-500/50 transition-all"
               >
                 <div className="absolute top-4 left-4 z-20">
                   <span className="rounded-full bg-cyan-500/90 text-zinc-950 px-3 py-1 text-[11px] font-black uppercase tracking-wider">
@@ -91,13 +91,13 @@ export function Hero({ featuredProduct, onSelectProduct }: HeroProps) {
                   </span>
                 </div>
 
-                <div className="relative w-full h-full flex items-center justify-center p-4">
+                <div className="absolute inset-0 w-full h-full overflow-hidden flex items-center justify-center">
                   {featuredProduct.image ? (
                     <img 
                       src={featuredProduct.image} 
                       alt={featuredProduct.name} 
                       referrerPolicy="no-referrer"
-                      className="object-contain max-h-[260px] w-full group-hover:scale-105 transition-transform duration-500"
+                      className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     />
                   ) : (
                     <div className="flex flex-col items-center justify-center text-zinc-600">
