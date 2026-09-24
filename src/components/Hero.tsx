@@ -42,9 +42,8 @@ export function Hero({ featuredProduct, onSelectProduct }: HeroProps) {
               </span>
             </h1>
 
-            <p className="mt-3 sm:mt-4 text-xs sm:text-base text-zinc-300 font-normal leading-snug sm:leading-relaxed">
-              Gaming gear for players who<br />
-              take it seriously.
+            <p className="mt-3 sm:mt-4 text-xs sm:text-base text-zinc-300 font-medium leading-snug sm:leading-relaxed">
+              Equip 100% authentic pro gaming gear at unbeatable prices.<br className="hidden sm:inline" /> Fast shipping & Cash on Delivery across Morocco.
             </p>
 
             <div className="mt-5 sm:mt-6">
