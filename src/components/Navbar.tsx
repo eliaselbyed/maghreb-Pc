@@ -36,29 +36,38 @@ export function Navbar({
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-zinc-900 bg-black">
+    <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-black/95 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.6)]">
+      {/* Subtle top edge neon line */}
+      <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-[#00f0ff] to-transparent opacity-60" />
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         
         {/* Left: Menu & Logo */}
         <div className="flex items-center gap-3">
           <button
             onClick={onOpenMenu}
-            className="p-1 -ml-1 text-white hover:text-cyan-400 rounded-lg transition-colors"
+            className="p-1.5 -ml-1.5 text-zinc-300 hover:text-[#00f0ff] rounded-lg transition-colors cursor-pointer"
             aria-label="Open navigation menu"
           >
-            <Menu className="h-6 w-6 text-white" />
+            <Menu className="h-6 w-6" />
           </button>
 
           <button
             onClick={onResetFilters}
-            className="flex items-center gap-2 group text-left focus:outline-none"
+            className="flex items-center gap-2 group text-left focus:outline-none cursor-pointer"
             aria-label="Maghreb PC Home"
           >
-            <div className="flex items-center gap-2">
-              <Zap className="h-6 w-6 text-cyan-400" />
-              <span className="text-xl font-black tracking-tight text-white uppercase">
-                MAGHREB <span className="text-cyan-400">PC</span>
-              </span>
+            <div className="flex items-center gap-2.5">
+              <div className="relative flex items-center justify-center">
+                <Zap className="h-6 w-6 text-[#00f0ff] drop-shadow-[0_0_8px_rgba(0,240,255,0.7)]" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-display text-2xl sm:text-2xl font-black tracking-wider text-white uppercase leading-none">
+                  MAGHREB <span className="text-[#00f0ff] text-glow-cyan">PC</span>
+                </span>
+                <span className="font-tech text-[9px] tracking-widest text-zinc-400 font-bold uppercase hidden sm:block">
+                  Authentic Esports Gear 🇲🇦
+                </span>
+              </div>
             </div>
           </button>
         </div>
@@ -89,7 +98,7 @@ export function Navbar({
               {searchQuery ? (
                 <button
                   onClick={() => onSearchChange('')}
-                  className="text-zinc-400 hover:text-white p-0.5 rounded-full hover:bg-white/10 transition-colors"
+                  className="text-zinc-400 hover:text-white p-0.5 rounded-full hover:bg-white/10 transition-colors cursor-pointer"
                   aria-label="Clear search"
                   title="Clear search"
                 >
@@ -98,7 +107,7 @@ export function Navbar({
               ) : isSearchActive ? (
                 <button
                   onClick={() => onSearchActiveChange?.(false)}
-                  className="text-[10px] font-mono font-bold tracking-wider px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-700 transition-colors"
+                  className="text-[10px] font-mono font-bold tracking-wider px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-700 transition-colors cursor-pointer"
                   title="Close search mode (ESC)"
                 >
                   ESC
@@ -113,7 +122,7 @@ export function Navbar({
           {/* Search Button */}
           <button
             onClick={handleMobileToggle}
-            className="p-1 text-white transition-colors hover:text-cyan-400"
+            className="p-1 text-white transition-colors hover:text-cyan-400 cursor-pointer"
             aria-label="Search"
           >
             <Search className="h-5 w-5 text-white" />
@@ -122,7 +131,7 @@ export function Navbar({
           {/* User Account */}
           <button
             onClick={onOpenUser}
-            className="p-1 text-white transition-colors hover:text-cyan-400"
+            className="p-1 text-white transition-colors hover:text-cyan-400 cursor-pointer"
             aria-label="Customer profile"
             title="User Account"
           >
@@ -132,7 +141,7 @@ export function Navbar({
           {/* Shopping Cart Button with circular cyan badge */}
           <button
             onClick={onOpenCart}
-            className="relative p-1 text-white transition-colors hover:text-cyan-400"
+            className="relative p-1 text-white transition-colors hover:text-cyan-400 cursor-pointer"
             aria-label="Open cart"
           >
             <ShoppingCart className="h-5 w-5 text-white" />
@@ -173,7 +182,7 @@ export function Navbar({
                 {searchQuery && (
                   <button
                     onClick={() => onSearchChange('')}
-                    className="text-zinc-400 hover:text-white p-1"
+                    className="text-zinc-400 hover:text-white p-1 cursor-pointer"
                     aria-label="Clear search"
                   >
                     <X className="h-3.5 w-3.5" />
@@ -186,7 +195,7 @@ export function Navbar({
                       onSearchActiveChange?.(false);
                     }
                   }}
-                  className="text-[10px] font-bold uppercase tracking-wider text-cyan-400 hover:text-white px-2 py-1 rounded bg-zinc-800"
+                  className="text-[10px] font-bold uppercase tracking-wider text-cyan-400 hover:text-white px-2 py-1 rounded bg-zinc-800 cursor-pointer"
                 >
                   Close
                 </button>

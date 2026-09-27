@@ -69,14 +69,14 @@ export function UserModal({ isOpen, onClose }: UserModalProps) {
                 href="https://wa.me/212770519490?text=Salam%2C%20je%20souhaite%20suivre%20ma%20commande%20Maghreb%20PC"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between p-3.5 rounded-xl bg-zinc-900 border border-white/5 hover:border-cyan-500/40 transition-all group"
+                className="flex items-center justify-between p-3.5 rounded-xl bg-zinc-900 border border-white/10 hover:border-cyan-400/50 transition-all group"
               >
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-cyan-500/10 text-cyan-400">
+                  <div className="p-2 rounded-lg bg-cyan-500/10 text-cyan-400 group-hover:bg-cyan-500/20">
                     <Package className="h-4 w-4" />
                   </div>
                   <div className="text-left">
-                    <div className="text-xs font-bold text-white group-hover:text-cyan-400 transition-colors">
+                    <div className="text-xs font-bold text-zinc-200 group-hover:text-white">
                       Track My Order
                     </div>
                     <div className="text-[11px] text-zinc-400">
@@ -91,34 +91,34 @@ export function UserModal({ isOpen, onClose }: UserModalProps) {
                 href="https://wa.me/212770519490?text=Salam%20Maghreb%20PC%2C%20j%27ai%20besoin%20d%27assistance"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between p-3.5 rounded-xl bg-zinc-900 border border-white/5 hover:border-emerald-500/40 transition-all group"
+                className="flex items-center justify-between p-3.5 rounded-xl bg-zinc-900 border border-white/10 hover:border-cyan-400/50 transition-all group"
               >
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400">
+                  <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/20">
                     <MessageCircle className="h-4 w-4" />
                   </div>
                   <div className="text-left">
-                    <div className="text-xs font-bold text-white group-hover:text-emerald-400 transition-colors">
+                    <div className="text-xs font-bold text-zinc-200 group-hover:text-white">
                       Chat on WhatsApp
                     </div>
                     <div className="text-[11px] text-zinc-400">+212 770 519 490</div>
                   </div>
                 </div>
-                <span className="text-[10px] uppercase font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">
+                <span className="text-[10px] uppercase font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
                   Active
                 </span>
               </a>
 
               <a
                 href="tel:+212770519490"
-                className="flex items-center justify-between p-3.5 rounded-xl bg-zinc-900 border border-white/5 hover:border-zinc-700 transition-all group"
+                className="flex items-center justify-between p-3.5 rounded-xl bg-zinc-900 border border-white/10 hover:border-cyan-400/50 transition-all group"
               >
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-zinc-800 text-zinc-300">
+                  <div className="p-2 rounded-lg bg-zinc-800 text-zinc-300 group-hover:text-white">
                     <Phone className="h-4 w-4" />
                   </div>
                   <div className="text-left">
-                    <div className="text-xs font-bold text-white">Call Service Client</div>
+                    <div className="text-xs font-bold text-zinc-200 group-hover:text-white">Call Service Client</div>
                     <div className="text-[11px] text-zinc-400">Dispo du Lun au Sam</div>
                   </div>
                 </div>
@@ -126,7 +126,7 @@ export function UserModal({ isOpen, onClose }: UserModalProps) {
             </div>
 
             {/* Moroccan Service Badge */}
-            <div className="rounded-xl bg-zinc-900/60 border border-white/5 p-3.5 space-y-2 text-xs text-zinc-300">
+            <div className="rounded-xl bg-zinc-900/60 border border-white/5 p-3.5 space-y-2 text-xs text-zinc-400">
               <div className="flex items-center gap-2">
                 <Truck className="h-4 w-4 text-cyan-400" />
                 <span>Expédition rapide dans tout le Maroc (Amana / CTM / Livraisons locales)</span>
@@ -140,7 +140,7 @@ export function UserModal({ isOpen, onClose }: UserModalProps) {
             <div className="mt-5 pt-4 border-t border-white/10 text-center">
               <button
                 onClick={onClose}
-                className="text-xs text-zinc-400 hover:text-white transition-colors"
+                className="text-xs text-zinc-400 hover:text-white transition-colors cursor-pointer"
               >
                 Close Hub
               </button>

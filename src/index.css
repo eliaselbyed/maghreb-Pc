@@ -1,1 +1,70 @@
 @import "tailwindcss";
+
+@theme {
+  --font-display: 'Rajdhani', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-tech: 'Chakra Petch', monospace;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+  --color-cyber-cyan: #00f0ff;
+  --color-cyber-cyan-hover: #38bdf8;
+  --color-cyber-dark: #030407;
+  --color-cyber-card: #0b0d14;
+  --color-cyber-border: #1a202c;
+  --color-cyber-green: #00ff88;
+  --color-cyber-purple: #8b5cf6;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: #030407;
+  }
+
+  body {
+    background-color: #030407;
+    color: #ffffff;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, .font-heading {
+    font-family: 'Rajdhani', -apple-system, BlinkMacSystemFont, sans-serif;
+    letter-spacing: -0.01em;
+  }
+}
+
+/* Custom esports utility classes */
+.font-display {
+  font-family: 'Rajdhani', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.font-tech {
+  font-family: 'Chakra Petch', monospace, sans-serif;
+}
+
+.font-body {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+/* Subtle tech grid background pattern */
+.bg-tech-grid {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+}
+
+/* Glowing text utilities */
+.text-glow-cyan {
+  text-shadow: 0 0 16px rgba(0, 240, 255, 0.45);
+}
+
+.shadow-neon-cyan {
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.35);
+}
+
+.shadow-neon-card {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), 0 0 1px 1px rgba(255, 255, 255, 0.08);
+}
+

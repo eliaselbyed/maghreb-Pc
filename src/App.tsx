@@ -324,7 +324,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white selection:bg-cyan-500/30">
+    <div className="min-h-screen bg-[#030407] text-white selection:bg-[#00f0ff]/30">
       <Navbar
         cartCount={totalCartCount}
         onOpenCart={() => setIsCartOpen(true)}
@@ -393,49 +393,41 @@ export default function App() {
             }`}
           >
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-4 sm:mb-6 gap-3">
+                <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-8 gap-3">
                   <div>
                     {shouldHideTopSection && (
                       <motion.div
                         initial={{ opacity: 0, y: -8 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-[11px] font-bold text-cyan-400 mb-2"
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#00f0ff]/10 border border-[#00f0ff]/30 font-tech text-[11px] font-bold text-[#00f0ff] mb-2.5"
                       >
-                        <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                        <span>Search Active</span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#00f0ff] animate-pulse" />
+                        <span>FILTER ACTIVE</span>
                       </motion.div>
                     )}
 
-                    <h2 className="text-2xl font-black uppercase tracking-tight text-white sm:text-4xl">
+                    <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-white leading-none">
                       {searchQuery ? (
-                        <>
-                          Search Results for <span className="text-cyan-400">"{searchQuery}"</span>
-                        </>
+                        <>Search Results for "{searchQuery}"</>
                       ) : shouldHideTopSection ? (
-                        <>
-                          All <span className="text-cyan-400">Gaming Gear</span>
-                        </>
+                        <>All Gaming Gear</>
                       ) : selectedCategory ? (
-                        <>
-                          {selectedCategory} <span className="text-cyan-400">Gear</span>
-                        </>
+                        <>{selectedCategory} <span className="text-[#00f0ff]">Arsenal</span></>
                       ) : (
-                        <>
-                          Featured <span className="text-cyan-400">Drops</span>
-                        </>
+                        <>Official Gear <span className="bg-gradient-to-r from-[#00f0ff] via-sky-300 to-[#a855f7] bg-clip-text text-transparent">Drops</span></>
                       )}
                     </h2>
-                    <p className="mt-1 text-xs sm:text-sm text-zinc-400">
+                    <p className="mt-2 font-tech text-xs sm:text-sm text-zinc-400 uppercase tracking-wider">
                       {isFetchingFromSupabase
-                        ? 'Fetching products from Supabase...'
+                        ? 'Connecting to live database...'
                         : searchQuery
                         ? `Found ${filteredProducts.length} matching item${filteredProducts.length === 1 ? '' : 's'}.`
                         : shouldHideTopSection
-                        ? `Showing all ${filteredProducts.length} items. Type in search bar above to filter live.`
+                        ? `Showing all ${filteredProducts.length} items. Live filter enabled.`
                         : selectedCategory
-                        ? `Explore our collection of ${selectedCategory}s.`
+                        ? `High-performance ${selectedCategory}s ready for instant dispatch in Morocco.`
                         : allProducts.length > 0
-                        ? `Showing ${allProducts.length} live product${allProducts.length === 1 ? '' : 's'} from your database.`
+                        ? `Showing ${allProducts.length} tournament-grade product${allProducts.length === 1 ? '' : 's'} with Cash On Delivery.`
                         : 'Products added from your admin page will appear here live.'}
                     </p>
                   </div>
@@ -443,9 +435,9 @@ export default function App() {
                   {(shouldHideTopSection || selectedCategory) && (
                     <button
                       onClick={handleResetFilters}
-                      className="self-start sm:self-auto inline-flex items-center gap-2 rounded-lg border border-white/10 bg-zinc-900/90 px-3.5 py-2 text-xs font-semibold text-zinc-300 hover:text-white hover:bg-zinc-800 hover:border-cyan-500/30 transition-all shadow-sm"
+                      className="self-start sm:self-auto inline-flex items-center gap-2 rounded-xl border border-white/10 bg-[#0b0e17] px-4 py-2 font-tech text-xs font-bold uppercase tracking-wider text-zinc-300 hover:text-white hover:border-[#00f0ff]/50 hover:bg-[#121726] transition-all shadow-sm cursor-pointer"
                     >
-                      <X className="h-3.5 w-3.5 text-cyan-400" />
+                      <X className="h-3.5 w-3.5 text-[#00f0ff]" />
                       <span>{shouldHideTopSection ? 'Show Hero & Categories' : 'Show all gear'}</span>
                     </button>
                   )}
@@ -498,17 +490,17 @@ export default function App() {
                         />
                       </svg>
                     </div>
-                    <h3 className="text-base font-bold text-zinc-300">No gear found</h3>
-                    <p className="text-xs text-zinc-500 mt-1 max-w-xs">
+                    <h3 className="text-base font-bold text-white">No gear found</h3>
+                    <p className="text-xs text-zinc-400 mt-1 max-w-xs">
                       {searchQuery
                         ? `No products match "${searchQuery}". Try another keyword or clear the search.`
                         : 'We could not find any products in this category.'}
                     </p>
                     <button
                       onClick={handleResetFilters}
-                      className="mt-4 rounded-md bg-cyan-500 px-4 py-1.5 text-xs font-bold text-zinc-950 hover:bg-cyan-400 transition-colors uppercase tracking-wider"
+                      className="mt-4 rounded-xl bg-gradient-to-r from-[#00f0ff] to-[#00c8ff] hover:from-cyan-300 hover:to-cyan-400 px-4 py-2 font-tech text-xs font-bold uppercase tracking-wider text-black shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all cursor-pointer"
                     >
-                      Reset filters
+                      Show All Gear
                     </button>
                   </div>
                 )}
@@ -528,12 +520,12 @@ export default function App() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 rounded-full bg-zinc-900/95 border border-cyan-500/40 px-4 py-2.5 shadow-[0_4px_25px_rgba(0,0,0,0.8)] backdrop-blur-md"
+            className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 rounded-full bg-[#0b0e17]/95 border border-white/20 px-4 py-2.5 shadow-2xl backdrop-blur-md"
           >
-            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-cyan-500 text-zinc-950">
-              <Check className="h-3.5 w-3.5 stroke-[3]" />
+            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-black">
+              <Check className="h-3.5 w-3.5 stroke-[3] text-black" />
             </div>
-            <span className="text-xs font-semibold text-zinc-200">
+            <span className="font-tech text-xs font-semibold text-white">
               Added <span className="text-white font-bold">{addedToast.name}</span> to cart
             </span>
             <button
@@ -541,9 +533,9 @@ export default function App() {
                 setAddedToast(null);
                 setIsCartOpen(true);
               }}
-              className="ml-1 flex items-center gap-1 text-xs font-black uppercase tracking-wider text-cyan-400 hover:text-cyan-300"
+              className="ml-1 flex items-center gap-1 font-tech text-xs font-black uppercase tracking-wider text-white hover:underline cursor-pointer"
             >
-              <ShoppingBag className="h-3.5 w-3.5" />
+              <ShoppingBag className="h-3.5 w-3.5 text-white" />
               <span>View</span>
             </button>
           </motion.div>

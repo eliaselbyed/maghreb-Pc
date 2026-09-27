@@ -6,43 +6,49 @@ interface FooterProps {
 
 export function Footer({ onOpenAdmin }: FooterProps = {}) {
   return (
-    <footer className="border-t border-white/5 bg-zinc-950 pt-16 pb-8 mt-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <footer className="border-t border-white/10 bg-[#030407] pt-16 pb-12 mt-20 relative overflow-hidden">
+      {/* Subtle top edge neon line */}
+      <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-[#00f0ff]/50 to-transparent" />
+      
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:gap-16">
           
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-2 mb-6">
-              <Zap className="h-6 w-6 text-cyan-400" />
-              <span className="text-xl font-black tracking-tighter text-white">
-                MAGHREB <span className="text-cyan-400">PC</span>
+            <div className="flex items-center gap-2.5 mb-4">
+              <Zap className="h-6 w-6 text-[#00f0ff] drop-shadow-[0_0_8px_rgba(0,240,255,0.7)]" />
+              <span className="font-display text-2xl font-black tracking-wider text-white uppercase">
+                MAGHREB <span className="text-[#00f0ff] text-glow-cyan">PC</span>
               </span>
             </div>
-            <p className="text-sm text-zinc-400 leading-relaxed max-w-sm">
-              Premium gaming peripherals and setups for competitive players. Level up your battlestation today.
+            <p className="font-body text-sm text-zinc-400 leading-relaxed max-w-sm mb-4">
+              Premium gaming peripherals and esports gear for competitive players in Morocco. Cash on delivery & nationwide express shipping.
             </p>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00f0ff]/10 border border-[#00f0ff]/30 font-tech text-[10px] font-bold text-[#00f0ff] uppercase tracking-wider">
+              <span>🇲🇦 Official Moroccan Gaming Store</span>
+            </div>
           </div>
 
           {/* Links 1 */}
           <div className="md:ml-auto">
-            <h4 className="text-sm font-bold uppercase tracking-wider text-white mb-4">Products</h4>
-            <ul className="space-y-3 text-sm text-zinc-400">
-              <li><a href="#products-section" className="hover:text-cyan-400 transition-colors">Mice & Keyboards</a></li>
-              <li><a href="#products-section" className="hover:text-cyan-400 transition-colors">Audio & Headsets</a></li>
-              <li><a href="#products-section" className="hover:text-cyan-400 transition-colors">Streaming Gear</a></li>
-              <li><a href="#products-section" className="hover:text-cyan-400 transition-colors">Monitor Arms</a></li>
+            <h4 className="font-display text-base font-bold uppercase tracking-wider text-white mb-4">Gear Catalog</h4>
+            <ul className="space-y-2.5 font-tech text-xs sm:text-sm text-zinc-400 uppercase tracking-wider">
+              <li><a href="#products-section" className="hover:text-[#00f0ff] transition-colors flex items-center gap-1.5"><span className="text-[#00f0ff]">›</span> Mice & Magnetic Docks</a></li>
+              <li><a href="#products-section" className="hover:text-[#00f0ff] transition-colors flex items-center gap-1.5"><span className="text-[#00f0ff]">›</span> Mechanical Keyboards</a></li>
+              <li><a href="#products-section" className="hover:text-[#00f0ff] transition-colors flex items-center gap-1.5"><span className="text-[#00f0ff]">›</span> Audio & Headsets</a></li>
+              <li><a href="#products-section" className="hover:text-[#00f0ff] transition-colors flex items-center gap-1.5"><span className="text-[#00f0ff]">›</span> Battlestation Accessories</a></li>
             </ul>
           </div>
 
         </div>
         
-        <div className="mt-16 border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-zinc-500">
-            &copy; {new Date().getFullYear()} Maghreb PC Gaming Store. All rights reserved.
+        <div className="mt-14 border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 font-tech text-xs text-zinc-500 uppercase tracking-wider">
+          <p>
+            &copy; {new Date().getFullYear()} MAGHREB PC GAMING STORE. ALL RIGHTS RESERVED.
           </p>
-          <div className="flex items-center gap-4 text-xs text-zinc-500">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+          <div className="flex items-center gap-5">
+            <span className="text-zinc-400 font-medium">⚡ Cash On Delivery</span>
+            <span className="text-zinc-400 font-medium">🚀 Express 24-48h Delivery</span>
           </div>
         </div>
       </div>

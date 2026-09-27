@@ -29,47 +29,61 @@ export function ProductCard({
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ delay: index * 0.1, duration: 0.5 }}
+      transition={{ delay: index * 0.08, duration: 0.4 }}
       onClick={handleCardClick}
-      className="group relative flex flex-col overflow-hidden rounded-xl border border-white/10 bg-zinc-900/50 transition-all hover:border-cyan-500/50 hover:shadow-[0_0_25px_rgba(34,211,238,0.15)] cursor-pointer"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0b0e17] transition-all duration-300 hover:border-[#00f0ff]/60 hover:shadow-[0_0_30px_rgba(0,240,255,0.22)] cursor-pointer"
     >
+      {/* Corner Tech Accent Lines */}
+      <div className="absolute top-0 right-0 w-8 h-8 pointer-events-none overflow-hidden z-20">
+        <div className="absolute top-0 right-0 w-[1px] h-3 bg-[#00f0ff] opacity-40 group-hover:opacity-100 transition-opacity" />
+        <div className="absolute top-0 right-0 w-3 h-[1px] bg-[#00f0ff] opacity-40 group-hover:opacity-100 transition-opacity" />
+      </div>
+
       {/* Badge */}
-      {product.badge && (
-        <div className="absolute left-3 top-3 z-10">
-          <span className="inline-flex items-center rounded-sm bg-cyan-500 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-zinc-950">
+      <div className="absolute left-3 top-3 z-20 flex flex-col gap-1">
+        {product.badge ? (
+          <span className="inline-flex items-center rounded-md bg-[#00f0ff]/20 border border-[#00f0ff]/50 px-2 py-0.5 font-tech text-[10px] font-bold uppercase tracking-wider text-[#00f0ff] backdrop-blur-md">
             {product.badge}
           </span>
-        </div>
-      )}
+        ) : (
+          <span className="inline-flex items-center gap-1.5 rounded-md bg-[#071328]/90 border border-sky-400/50 px-2 py-0.5 font-tech text-[9px] font-bold uppercase tracking-wider text-sky-400 backdrop-blur-md shadow-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.8)]" />
+            IN STOCK
+          </span>
+        )}
+      </div>
 
-      {/* Image Container */}
-      <div className="relative aspect-square overflow-hidden bg-zinc-950 p-3 sm:p-6 flex items-center justify-center">
-        <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-10" />
+      {/* Image Container with Ambient Spotlight */}
+      <div className="relative aspect-square overflow-hidden bg-[#070910] p-4 sm:p-7 flex items-center justify-center">
+        {/* Radial ambient spotlight for dramatic product illumination */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(0,240,255,0.12)_0%,_transparent_70%)] opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0e17] via-transparent to-transparent opacity-80 z-10" />
+        
         {product.image ? (
           <img
             src={product.image}
             alt={product.name}
             referrerPolicy="no-referrer"
-            className="h-full w-full object-contain object-center transition-transform duration-500 group-hover:scale-105"
+            className="h-full w-full object-contain object-center transition-transform duration-500 group-hover:scale-108 relative z-10"
           />
         ) : (
-          <div className="flex flex-col items-center justify-center text-zinc-700">
-            <Package className="w-10 h-10 mb-1" />
-            <span className="text-[10px] uppercase font-bold text-zinc-600">No Image</span>
+          <div className="flex flex-col items-center justify-center text-zinc-700 relative z-10">
+            <Package className="w-10 h-10 mb-1 text-zinc-600" />
+            <span className="font-tech text-[10px] uppercase font-bold text-zinc-500">Gear Image</span>
           </div>
         )}
         
         {/* Quick Action Buttons - Appears on Hover */}
-        <div className="absolute bottom-2 sm:bottom-3 left-0 right-0 z-20 flex translate-y-8 justify-center gap-2 px-3 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 hidden sm:flex">
+        <div className="absolute bottom-2.5 sm:bottom-3 left-0 right-0 z-30 flex translate-y-8 justify-center gap-2 px-3 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 hidden sm:flex">
           {onAddToCart && (
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 onAddToCart(product);
               }}
-              className="flex-1 flex items-center justify-center gap-1.5 rounded-md bg-cyan-500 px-3 py-2 text-xs font-bold text-zinc-950 hover:bg-cyan-400 transition-colors uppercase shadow-[0_0_10px_rgba(34,211,238,0.4)]"
+              className="flex-1 flex items-center justify-center gap-1.5 rounded-lg bg-[#00f0ff] px-3 py-2 font-tech text-xs font-bold text-black hover:bg-cyan-300 transition-all uppercase shadow-[0_0_15px_rgba(0,240,255,0.5)] cursor-pointer"
             >
-              <ShoppingCart className="h-3.5 w-3.5" />
+              <ShoppingCart className="h-3.5 w-3.5 stroke-[2.5]" />
               + Cart
             </button>
           )}
@@ -78,7 +92,7 @@ export function ProductCard({
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            className="flex-1 flex items-center justify-center gap-1.5 rounded-md bg-white px-3 py-2 text-xs font-bold text-zinc-950 hover:bg-zinc-200 transition-colors uppercase"
+            className="flex-1 flex items-center justify-center gap-1.5 rounded-lg bg-white px-3 py-2 font-tech text-xs font-bold text-black hover:bg-zinc-200 transition-colors uppercase cursor-pointer"
           >
             Order
           </a>
@@ -86,17 +100,27 @@ export function ProductCard({
       </div>
 
       {/* Content */}
-      <div className="flex flex-1 flex-col p-3 sm:p-5">
-        <h3 className="text-xs sm:text-base font-bold uppercase tracking-tight text-white line-clamp-2 mb-1 group-hover:text-cyan-400 transition-colors">
+      <div className="flex flex-1 flex-col p-3.5 sm:p-5 bg-[#0b0e17]">
+        <div className="flex items-center justify-between gap-1 mb-1">
+          <span className="font-tech text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-zinc-400">
+            {product.category}
+          </span>
+        </div>
+
+        <h3 className="font-display text-sm sm:text-lg font-bold uppercase tracking-wide text-white line-clamp-2 mb-2 group-hover:text-[#00f0ff] transition-colors leading-snug">
           {product.name}
         </h3>
-        <p className="text-[10px] sm:text-sm text-zinc-500">{product.category}</p>
         
-        <div className="mt-auto pt-2 sm:pt-4 flex items-center justify-between gap-1">
-          <div className="flex items-baseline gap-1 sm:gap-2">
-            <span className="text-sm sm:text-xl font-black text-cyan-400">{product.price} <span className="text-[10px] sm:text-sm">DH</span></span>
+        <div className="mt-auto pt-3 flex items-center justify-between gap-1 border-t border-white/5">
+          <div className="flex items-baseline gap-1.5">
+            <span className="font-display text-lg sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#00f0ff] via-sky-300 to-white tracking-tight">
+              {product.price}
+            </span>
+            <span className="font-tech text-[10px] sm:text-xs font-bold text-[#00f0ff]">
+              DH
+            </span>
             {product.originalPrice && (
-              <span className="text-[10px] sm:text-sm font-medium text-zinc-500 line-through">
+              <span className="font-tech text-[10px] sm:text-xs font-medium text-zinc-500 line-through ml-1">
                 {product.originalPrice} DH
               </span>
             )}
@@ -109,9 +133,9 @@ export function ProductCard({
                   onAddToCart(product);
                 }}
                 aria-label="Add to cart"
-                className="flex items-center justify-center rounded bg-zinc-800 hover:bg-zinc-700 text-cyan-400 p-1.5 border border-white/10"
+                className="flex items-center justify-center rounded-lg bg-zinc-800 hover:bg-zinc-700 text-[#00f0ff] p-2 border border-white/10 cursor-pointer"
               >
-                <ShoppingCart className="h-3.5 w-3.5" />
+                <ShoppingCart className="h-4 w-4" />
               </button>
             )}
             <a
@@ -119,7 +143,7 @@ export function ProductCard({
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="flex items-center rounded bg-cyan-500 px-2 py-1 text-[10px] font-bold tracking-wider text-zinc-950 hover:bg-cyan-400"
+              className="flex items-center rounded-lg bg-[#00f0ff] px-2.5 py-1.5 font-tech text-[11px] font-bold tracking-wider text-black hover:bg-cyan-300 cursor-pointer"
             >
               ORDER
             </a>

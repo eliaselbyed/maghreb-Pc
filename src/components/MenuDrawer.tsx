@@ -58,19 +58,19 @@ export function MenuDrawer({
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 26, stiffness: 260 }}
-              className="pointer-events-auto w-full max-w-xs bg-zinc-950 border-r border-white/10 text-white flex flex-col shadow-2xl h-full"
+              className="pointer-events-auto w-full max-w-xs bg-[#080a12] border-r border-white/10 text-white flex flex-col shadow-2xl h-full"
             >
               {/* Header */}
-              <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
-                <div className="flex items-center gap-2">
-                  <Zap className="h-6 w-6 text-cyan-400" />
-                  <span className="text-lg font-black tracking-tighter text-white">
-                    MAGHREB <span className="text-cyan-400">PC</span>
+              <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 bg-[#06080e]">
+                <div className="flex items-center gap-2.5">
+                  <Zap className="h-6 w-6 text-[#00f0ff] drop-shadow-[0_0_8px_rgba(0,240,255,0.7)]" />
+                  <span className="font-display text-xl font-black tracking-wider text-white uppercase">
+                    MAGHREB <span className="text-[#00f0ff] text-glow-cyan">PC</span>
                   </span>
                 </div>
                 <button
                   onClick={onClose}
-                  className="rounded-lg p-1.5 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+                  className="rounded-lg p-1.5 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -79,20 +79,20 @@ export function MenuDrawer({
               {/* Navigation links & Categories */}
               <div className="flex-1 overflow-y-auto p-5 space-y-6">
                 <div>
-                  <h3 className="text-[11px] font-bold uppercase tracking-widest text-zinc-500 mb-3">
-                    Categories
+                  <h3 className="font-tech text-[11px] font-bold uppercase tracking-widest text-zinc-400 mb-3">
+                    Gear Categories
                   </h3>
                   <div className="space-y-1">
                     <button
                       onClick={() => handleCategoryClick(null)}
-                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors ${
+                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-tech text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer ${
                         selectedCategory === null
-                          ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/30'
-                          : 'text-zinc-300 hover:bg-white/5 hover:text-white'
+                          ? 'bg-[#00f0ff]/15 text-[#00f0ff] border border-[#00f0ff]/40'
+                          : 'text-zinc-300 hover:bg-white/5'
                       }`}
                     >
                       <span>All Products</span>
-                      <Package className="h-4 w-4 opacity-60" />
+                      <Package className={`h-4 w-4 ${selectedCategory === null ? 'text-[#00f0ff]' : 'text-zinc-500'}`} />
                     </button>
 
                     {categories.map((cat) => {
@@ -101,15 +101,15 @@ export function MenuDrawer({
                         <button
                           key={cat.id}
                           onClick={() => handleCategoryClick(cat.name)}
-                          className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
+                          className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-tech text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer ${
                             isSelected
-                              ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/30'
-                              : 'text-zinc-400 hover:bg-white/5 hover:text-white'
+                              ? 'bg-[#00f0ff]/15 text-[#00f0ff] border border-[#00f0ff]/40 font-bold'
+                              : 'text-zinc-300 hover:bg-white/5 hover:text-white'
                           }`}
                         >
                           <span>{cat.name}</span>
                           {isSelected && (
-                            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
+                            <span className="h-2 w-2 rounded-full bg-[#00f0ff] animate-pulse" />
                           )}
                         </button>
                       );
@@ -118,27 +118,27 @@ export function MenuDrawer({
                 </div>
 
                 {/* Moroccan Perks */}
-                <div className="rounded-xl border border-white/5 bg-zinc-900/50 p-3.5 space-y-2.5 text-xs">
+                <div className="rounded-2xl border border-white/10 bg-[#0b0e17] p-4 space-y-3 font-tech text-xs">
                   <div className="flex items-center gap-2.5 text-zinc-300">
-                    <Truck className="h-4 w-4 text-cyan-400 flex-shrink-0" />
-                    <span>Livraison 24-48h partout au Maroc</span>
+                    <Truck className="h-4 w-4 text-[#00f0ff] flex-shrink-0" />
+                    <span className="uppercase tracking-wider">Fast 24-48h Delivery Morocco</span>
                   </div>
                   <div className="flex items-center gap-2.5 text-zinc-300">
-                    <ShieldCheck className="h-4 w-4 text-emerald-400 flex-shrink-0" />
-                    <span>Paiement à la livraison (COD)</span>
+                    <ShieldCheck className="h-4 w-4 text-[#00ff88] flex-shrink-0" />
+                    <span className="uppercase tracking-wider">Cash on Delivery (COD)</span>
                   </div>
                 </div>
 
                 {/* Direct Contact */}
                 <div>
-                  <h3 className="text-[11px] font-bold uppercase tracking-widest text-zinc-500 mb-2">
-                    Customer Service
+                  <h3 className="font-tech text-[11px] font-bold uppercase tracking-widest text-zinc-400 mb-2">
+                    Direct WhatsApp Support
                   </h3>
                   <a
                     href="https://wa.me/212770519490?text=Salam%20Maghreb%20PC%2C%20j%27ai%20une%20question"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2.5 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/20 transition-colors text-xs font-semibold"
+                    className="flex items-center gap-2.5 p-3 rounded-xl bg-[#00ff88]/15 border border-[#00ff88]/30 font-tech text-xs font-bold text-[#00ff88] uppercase tracking-wider hover:bg-[#00ff88]/25 transition-all shadow-[0_0_15px_rgba(0,255,136,0.15)]"
                   >
                     <MessageCircle className="h-4 w-4" />
                     <span>WhatsApp: +212 770 519 490</span>
@@ -154,16 +154,16 @@ export function MenuDrawer({
                       onClose();
                       onOpenAdmin();
                     }}
-                    className="w-full flex items-center justify-center gap-2 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 py-2.5 px-4 font-bold text-xs uppercase tracking-wider transition-colors"
+                    className="w-full flex items-center justify-center gap-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 border border-white/15 text-white py-2.5 px-4 font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer"
                   >
-                    <ShieldCheck className="h-3.5 w-3.5" />
+                    <ShieldCheck className="h-3.5 w-3.5 text-cyan-400" />
                     <span>Supabase Admin Panel</span>
                   </button>
                 )}
 
                 <a
                   href="tel:+212770519490"
-                  className="w-full flex items-center justify-center gap-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-white/10 text-white py-2.5 px-4 font-bold text-xs uppercase tracking-wider transition-colors"
+                  className="w-full flex items-center justify-center gap-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-white/10 text-zinc-300 hover:text-white py-2.5 px-4 font-bold text-xs uppercase tracking-wider transition-colors"
                 >
                   <Phone className="h-3.5 w-3.5 text-cyan-400" />
                   <span>Call Support</span>

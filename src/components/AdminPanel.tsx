@@ -359,23 +359,23 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
   return (
     <div className="min-h-screen bg-[#07090e] text-slate-100 font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
       {/* Top Banner & Navigation */}
-      <header className="sticky top-0 z-40 bg-[#0c1017]/90 backdrop-blur-md border-b border-cyan-900/30 px-4 sm:px-8 py-3.5 flex items-center justify-between">
+      <header className="sticky top-0 z-40 bg-[#0c1017]/90 backdrop-blur-md border-b border-cyan-950/60 px-4 sm:px-8 py-3.5 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button
             onClick={onBackToStore}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-cyan-400 border border-slate-800 transition-colors text-sm font-medium"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 transition-colors text-sm font-medium cursor-pointer"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-4 h-4 text-cyan-400" />
             <span>Storefront</span>
           </button>
           <div className="h-5 w-px bg-slate-800" />
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-600 to-blue-600 flex items-center justify-center text-white font-black text-sm shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-black font-black text-sm shadow-[0_0_15px_rgba(6,182,212,0.5)]">
               M
             </div>
             <div>
               <h1 className="text-base font-bold tracking-tight text-white flex items-center gap-2">
-                MAGHREB PC <span className="text-xs px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 font-mono font-medium border border-cyan-500/20">ADMIN PANEL</span>
+                MAGHREB PC <span className="text-xs px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 font-mono font-medium border border-cyan-800/50">ADMIN PANEL</span>
               </h1>
             </div>
           </div>
@@ -390,21 +390,21 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
               </span>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/20 text-xs font-medium transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 text-xs font-medium transition-colors cursor-pointer"
                 title="Sign Out"
               >
-                <LogOut className="w-3.5 h-3.5" />
+                <LogOut className="w-3.5 h-3.5 text-rose-400" />
                 <span className="hidden sm:inline">Sign Out</span>
               </button>
             </div>
           ) : isDemoMode ? (
             <div className="flex items-center gap-2">
-              <span className="text-xs px-2.5 py-1 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20 font-mono">
+              <span className="text-xs px-2.5 py-1 rounded bg-amber-950/60 text-amber-400 border border-amber-800/50 font-mono font-bold">
                 DEMO MODE
               </span>
               <button
                 onClick={handleLogout}
-                className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition-colors"
+                className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition-colors cursor-pointer"
               >
                 Exit Demo
               </button>
@@ -420,12 +420,12 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed top-16 right-6 z-50 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-950/90 text-emerald-200 border border-emerald-500/30 text-sm shadow-xl backdrop-blur-md"
+            className="fixed top-16 right-6 z-50 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-950 border border-emerald-500/50 text-emerald-200 text-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)] backdrop-blur-md"
           >
             <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>{successToast}</span>
             <button onClick={() => setSuccessToast(null)} className="ml-2 hover:opacity-80">
-              <X className="w-3.5 h-3.5" />
+              <X className="w-3.5 h-3.5 text-emerald-300" />
             </button>
           </motion.div>
         )}
@@ -437,10 +437,10 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
         {/* ==================================================== */}
         {!sessionUser && !isDemoMode ? (
           <div className="max-w-md mx-auto my-12">
-            <div className="bg-[#0e131d] rounded-2xl border border-cyan-900/40 p-6 sm:p-8 shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
+            <div className="bg-[#0e131d] rounded-2xl border border-cyan-950/60 p-6 sm:p-8 shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
               <div className="text-center mb-6">
                 <div className="inline-flex p-3 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 mb-3">
-                  <Database className="w-6 h-6" />
+                  <Database className="w-6 h-6 text-cyan-400" />
                 </div>
                 <h2 className="text-xl font-bold text-white tracking-tight">Supabase Admin Access</h2>
                 <p className="text-sm text-slate-400 mt-1">
@@ -455,16 +455,12 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
                   : 'bg-amber-950/40 border-amber-500/30 text-amber-300'
               }`}>
                 <div className="flex items-start gap-2">
-                  {isSupabaseConfigured ? (
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                  ) : (
-                    <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                  )}
+                  <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-cyan-400" />
                   <div>
                     <span className="font-semibold block">
                       {isSupabaseConfigured ? 'Supabase Connected' : 'Supabase Credentials Pending'}
                     </span>
-                    <span className="text-[11px] opacity-85 block mt-0.5">
+                    <span className="text-[11px] opacity-80 block mt-0.5">
                       {isSupabaseConfigured
                         ? 'Using VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY from environment.'
                         : 'VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are currently template placeholders in .env. You can sign in once configured, or click below to enter in Demo Mode.'}
@@ -475,7 +471,7 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
 
               {/* Auth error */}
               {authError && (
-                <div className="mb-4 p-3 rounded-xl bg-rose-950/60 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
+                <div className="mb-4 p-3 rounded-xl bg-rose-950/50 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
                   <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
                   <span>{authError}</span>
                 </div>
@@ -483,7 +479,7 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
 
               {/* Auth success message (e.g. signup email confirmation) */}
               {authSuccessMsg && (
-                <div className="mb-4 p-3 rounded-xl bg-emerald-950/60 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2">
+                <div className="mb-4 p-3 rounded-xl bg-emerald-950/50 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                   <span>{authSuccessMsg}</span>
                 </div>
@@ -517,7 +513,7 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
                 <button
                   type="submit"
                   disabled={authLoading}
-                  className="w-full py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold text-sm transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)] disabled:opacity-50"
+                  className="w-full py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold text-sm transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)] disabled:opacity-50 cursor-pointer"
                 >
                   {authLoading ? 'Authenticating...' : authMode === 'signin' ? 'Sign In to Admin' : 'Create Admin Account'}
                 </button>
@@ -531,7 +527,7 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
                     setAuthError(null);
                     setAuthSuccessMsg(null);
                   }}
-                  className="hover:text-cyan-400 transition-colors"
+                  className="hover:text-cyan-400 transition-colors cursor-pointer"
                 >
                   {authMode === 'signin' ? 'Need an account? Sign up' : 'Already have an account? Sign in'}
                 </button>
@@ -542,7 +538,7 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
                 <button
                   type="button"
                   onClick={() => setIsDemoMode(true)}
-                  className="w-full py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 text-xs font-medium transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-cyan-900/50 text-xs font-medium transition-colors flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Eye className="w-3.5 h-3.5 text-cyan-400" />
                   <span>Enter as Demo Admin (Preview Mode)</span>
@@ -576,17 +572,17 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
                 </div>
                 <div>
                   <span className="text-xs text-slate-400 font-medium block">In Stock</span>
-                  <span className="text-2xl font-bold text-emerald-400 tracking-tight">{inStockCount}</span>
+                  <span className="text-2xl font-bold text-white tracking-tight">{inStockCount}</span>
                 </div>
               </div>
 
               <div className="p-4 rounded-2xl bg-[#0e131d] border border-cyan-950/60 flex items-center gap-4">
-                <div className="p-3 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                <div className="p-3 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
                   <ShieldAlert className="w-5 h-5" />
                 </div>
                 <div>
                   <span className="text-xs text-slate-400 font-medium block">Out of Stock</span>
-                  <span className="text-2xl font-bold text-rose-400 tracking-tight">{outOfStockCount}</span>
+                  <span className="text-2xl font-bold text-white tracking-tight">{outOfStockCount}</span>
                 </div>
               </div>
 
@@ -596,32 +592,28 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
                 </div>
                 <div>
                   <span className="text-xs text-slate-400 font-medium block">Avg Price</span>
-                  <span className="text-2xl font-bold text-white tracking-tight">${avgPrice}</span>
+                  <span className="text-2xl font-bold text-white tracking-tight">{avgPrice} DH</span>
                 </div>
               </div>
             </div>
 
             {/* Supabase status and seed button banner */}
-            <div className="p-4 rounded-2xl bg-[#0e131d] border border-cyan-900/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="p-4 rounded-2xl bg-[#0e131d] border border-cyan-950/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className={`p-2.5 rounded-xl border ${
-                  isSupabaseConfigured
-                    ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-                    : 'bg-amber-500/10 border-amber-500/20 text-amber-400'
-                }`}>
-                  <Database className="w-5 h-5" />
+                <div className="p-2.5 rounded-xl border border-cyan-500/20 bg-cyan-500/10 text-cyan-400">
+                  <Database className="w-5 h-5 text-cyan-400" />
                 </div>
                 <div>
                   <h3 className="text-sm font-semibold text-white flex items-center gap-2">
                     Supabase Database & Storage
                     {isSupabaseConfigured ? (
-                      <span className="text-[11px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Connected</span>
+                      <span className="text-[11px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-medium">Connected</span>
                     ) : (
-                      <span className="text-[11px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">Demo / Fallback Mode</span>
+                      <span className="text-[11px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-medium">Demo / Fallback Mode</span>
                     )}
                   </h3>
                   <p className="text-xs text-slate-400 mt-0.5">
-                    Table: <code className="text-cyan-300">products</code> • Storage Bucket: <code className="text-cyan-300">product-images</code>
+                    Table: <code className="text-cyan-300 font-mono">products</code> • Storage Bucket: <code className="text-cyan-300 font-mono">product-images</code>
                   </p>
                 </div>
               </div>
@@ -751,10 +743,10 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
 
                           {/* Price */}
                           <td className="py-3 px-4 font-mono">
-                            <span className="text-white font-bold">${Number(product.price).toFixed(2)}</span>
+                            <span className="text-cyan-400 font-bold">{Number(product.price).toFixed(2)} DH</span>
                             {product.originalPrice ? (
                               <span className="text-xs text-slate-500 line-through ml-2">
-                                ${Number(product.originalPrice).toFixed(2)}
+                                {Number(product.originalPrice).toFixed(2)} DH
                               </span>
                             ) : null}
                           </td>
@@ -767,8 +759,8 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
                                 In Stock
                               </span>
                             ) : (
-                              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-rose-500/10 text-rose-400 border border-rose-500/20">
-                                <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
+                              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
                                 Out of Stock
                               </span>
                             )}
@@ -777,7 +769,7 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
                           {/* Badge */}
                           <td className="py-3 px-4">
                             {product.badge ? (
-                              <span className="inline-flex px-2 py-0.5 rounded text-[10px] font-bold tracking-wider bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
+                              <span className="inline-flex px-2 py-0.5 rounded text-[10px] font-bold tracking-wider bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
                                 {product.badge}
                               </span>
                             ) : (
@@ -790,14 +782,14 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
                             <div className="flex items-center justify-end gap-1.5">
                               <button
                                 onClick={() => handleOpenEdit(product)}
-                                className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-cyan-400 transition-colors"
+                                className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer"
                                 title="Edit Product"
                               >
                                 <Edit2 className="w-4 h-4" />
                               </button>
                               <button
                                 onClick={() => setDeletingId(product.id)}
-                                className="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-950 text-slate-300 hover:text-rose-400 transition-colors"
+                                className="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-950/50 text-slate-300 hover:text-rose-400 transition-colors cursor-pointer"
                                 title="Delete Product"
                               >
                                 <Trash2 className="w-4 h-4" />
@@ -825,19 +817,19 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-[#0e131d] border border-cyan-900/40 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden my-auto"
+              className="bg-[#0e131d] border border-white/15 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden my-auto"
             >
               {/* Modal Header */}
-              <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+              <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between">
                 <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                  {editingProduct ? <Edit2 className="w-4 h-4 text-cyan-400" /> : <Plus className="w-4 h-4 text-cyan-400" />}
+                  {editingProduct ? <Edit2 className="w-4 h-4 text-white" /> : <Plus className="w-4 h-4 text-white" />}
                   <span>{editingProduct ? 'Edit Product' : 'Add New Product'}</span>
                 </h3>
                 <button
                   onClick={() => setIsFormOpen(false)}
-                  className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+                  className="p-1 rounded-lg text-white/60 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-5 h-5 text-white" />
                 </button>
               </div>
 
@@ -880,7 +872,7 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-semibold text-slate-300 mb-1">
-                      Price ($) <span className="text-rose-400">*</span>
+                      Price (DH) <span className="text-rose-400">*</span>
                     </label>
                     <input
                       type="number"
@@ -895,7 +887,7 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
 
                   <div>
                     <label className="block text-xs font-semibold text-slate-300 mb-1">
-                      Stock Status <span className="text-cyan-400 font-mono text-[10px]">(stock_status)</span>
+                      Stock Status <span className="text-slate-500 font-mono text-[10px]">(stock_status)</span>
                     </label>
                     <select
                       value={formStockStatus}
@@ -942,7 +934,7 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
                           type="button"
                           disabled={isUploadingImage}
                           onClick={() => fileInputRef.current?.click()}
-                          className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold transition-colors disabled:opacity-50"
+                          className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 text-xs font-semibold transition-colors disabled:opacity-50 cursor-pointer"
                         >
                           <Upload className="w-3.5 h-3.5" />
                           <span>{isUploadingImage ? 'Uploading to Supabase...' : 'Upload Image to Supabase'}</span>
@@ -951,7 +943,7 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
                       </div>
 
                       {imageUploadError && (
-                        <p className="text-xs text-rose-400">{imageUploadError}</p>
+                        <p className="text-xs text-rose-400 font-semibold">{imageUploadError}</p>
                       )}
 
                       <div>
@@ -960,7 +952,7 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
                           value={formImage}
                           onChange={(e) => setFormImage(e.target.value)}
                           placeholder="Or paste public Image URL (/attack-shark-v6.png or https://...)"
-                          className="w-full px-3 py-1.5 rounded-lg bg-[#0e131d] border border-slate-800 text-xs text-slate-300 placeholder-slate-600 focus:outline-none focus:border-cyan-500 font-mono"
+                          className="w-full px-3 py-1.5 rounded-lg bg-[#0e131d] border border-slate-800 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 font-mono"
                         />
                       </div>
                     </div>
@@ -984,14 +976,14 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
                   <button
                     type="button"
                     onClick={() => setIsFormOpen(false)}
-                    className="px-4 py-2 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-300 text-sm font-medium transition-colors"
+                    className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-medium transition-colors cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isSaving}
-                    className="px-5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-sm font-semibold transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)] disabled:opacity-50"
+                    className="px-5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-sm font-semibold transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)] disabled:opacity-50 cursor-pointer"
                   >
                     {isSaving ? 'Saving to Supabase...' : editingProduct ? 'Update Product' : 'Create Product'}
                   </button>
@@ -1012,20 +1004,20 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-[#0e131d] border border-rose-900/40 rounded-2xl w-full max-w-sm p-6 shadow-2xl"
+              className="bg-[#0e131d] border border-rose-950/60 rounded-2xl w-full max-w-sm p-6 shadow-2xl"
             >
               <div className="flex items-center gap-3 text-rose-400 mb-3">
                 <Trash2 className="w-6 h-6" />
                 <h4 className="text-base font-bold text-white">Delete Product?</h4>
               </div>
               <p className="text-sm text-slate-400 mb-5">
-                This action will remove the product record from your Supabase <code className="text-cyan-300">products</code> table.
+                This action will remove the product record from your Supabase <code className="text-cyan-300 font-mono">products</code> table.
               </p>
               <div className="flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setDeletingId(null)}
-                  className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition-colors"
+                  className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -1033,7 +1025,7 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
                   type="button"
                   disabled={isDeleting}
                   onClick={handleDeleteProduct}
-                  className="px-4 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold transition-colors disabled:opacity-50"
+                  className="px-4 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition-colors disabled:opacity-50 cursor-pointer shadow-[0_0_15px_rgba(225,29,72,0.4)]"
                 >
                   {isDeleting ? 'Deleting...' : 'Yes, Delete'}
                 </button>
