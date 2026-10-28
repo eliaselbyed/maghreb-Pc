@@ -22,37 +22,36 @@ export function Hero({ featuredProduct, onSelectProduct }: HeroProps) {
         {/* Background Desk Banner Image */}
         <div className="absolute inset-0 z-0">
           <img
-            src="/gaming-desk-banner.jpg"
+            src="/assets/aistudio/image_eafdbcbd.png"
             alt="Gaming battlestation setup"
-            referrerPolicy="no-referrer"
             className="h-full w-full object-cover object-[70%_center] sm:object-center"
           />
           {/* Subtle cinematic gradient overlays for high text contrast */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/90 to-transparent sm:via-black/60" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/85 to-black/30 sm:via-black/60 sm:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30" />
         </div>
 
         {/* Text & Action Overlay with new esports fonts and vibrant vibe */}
         <div className="relative z-10 w-full mx-auto max-w-7xl px-5 sm:px-8 lg:px-12 py-10 sm:py-16">
-          <div className="max-w-[300px] sm:max-w-lg lg:max-w-2xl">
+          <div className="max-w-md sm:max-w-lg lg:max-w-2xl">
             {/* Tech tag */}
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00f0ff]/10 border border-[#00f0ff]/30 text-[10px] sm:text-xs font-tech font-bold uppercase tracking-widest text-[#00f0ff] mb-3 backdrop-blur-md">
               <span className="h-1.5 w-1.5 rounded-full bg-[#00f0ff] animate-ping" />
               <span>MOROCCO ESPORTS GEAR HEADQUARTERS</span>
             </div>
 
-            <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight text-white leading-[0.95]">
-              DOMINATE<br />
+            <h1 className="font-display text-2xl xs:text-3xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight text-white leading-tight sm:leading-[0.95] whitespace-nowrap">
+              DOMINATE{' '}
               <span className="bg-gradient-to-r from-[#00f0ff] via-sky-300 to-[#a855f7] bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(0,240,255,0.4)]">
                 THE GAME
               </span>
             </h1>
 
-            <p className="mt-3.5 sm:mt-4 text-xs sm:text-base text-zinc-300 font-medium leading-relaxed max-w-lg">
+            <p className="mt-3.5 sm:mt-4 text-xs sm:text-base text-zinc-300 font-medium leading-relaxed max-w-lg text-center sm:text-left mx-auto sm:mx-0">
               Equip 100% authentic pro gaming gear at unbeatable prices.<br className="hidden sm:inline" /> Fast shipping & Cash on Delivery across Morocco.
             </p>
 
-            <div className="mt-6 sm:mt-8 flex items-center gap-4 flex-wrap">
+            <div className="mt-6 sm:mt-8 flex items-center justify-center sm:justify-start gap-4 flex-wrap">
               <button
                 type="button"
                 onClick={scrollToProducts}
