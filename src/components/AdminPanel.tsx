@@ -21,6 +21,9 @@ import {
   Package,
   X,
   ExternalLink,
+  Tag,
+  Flame,
+  Percent,
 } from 'lucide-react';
 import {
   supabase,
@@ -29,6 +32,9 @@ import {
   upsertProduct,
   deleteProduct,
   uploadProductImage,
+  setStoredDiscount,
+  getStoredDemoProducts,
+  saveStoredDemoProducts,
 } from '../supabase';
 import { Product } from '../types';
 import { categories } from '../data';
@@ -68,6 +74,7 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
   const [formName, setFormName] = useState('');
   const [formCategory, setFormCategory] = useState('Mouse');
   const [formPrice, setFormPrice] = useState<number | string>('');
+  const [formOriginalPrice, setFormOriginalPrice] = useState<number | string>('');
   const [formStockStatus, setFormStockStatus] = useState<'in_stock' | 'out_of_stock'>('in_stock');
   const [formImage, setFormImage] = useState('');
   const [formDescription, setFormDescription] = useState('');
@@ -123,14 +130,16 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
         setProductsList(fetched || []);
         onProductsUpdated?.(fetched || []);
       } else {
-        setProductsList([]);
-        onProductsUpdated?.([]);
+        const localProds = getStoredDemoProducts();
+        setProductsList(localProds);
+        onProductsUpdated?.(localProds);
       }
     } catch (err: any) {
       console.error('Error fetching Supabase products:', err);
       setErrorMessage(err.message || 'Failed to load products from Supabase');
-      setProductsList([]);
-      onProductsUpdated?.([]);
+      const localProds = getStoredDemoProducts();
+      setProductsList(localProds);
+      onProductsUpdated?.(localProds);
     } finally {
       setIsLoadingProducts(false);
     }
@@ -203,6 +212,7 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
     setFormName('');
     setFormCategory('Mouse');
     setFormPrice('');
+    setFormOriginalPrice('');
     setFormStockStatus('in_stock');
     setFormImage('');
     setFormDescription('');
@@ -216,6 +226,9 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
     setFormName(p.name);
     setFormCategory(p.category || 'Mouse');
     setFormPrice(p.price);
+    setFormOriginalPrice(
+      p.originalPrice && Number(p.originalPrice) > Number(p.price) ? p.originalPrice : ''
+    );
     const rawStatus = (p.stockStatus || '').toLowerCase().trim();
     setFormStockStatus(rawStatus === 'out_of_stock' || p.inStock === false ? 'out_of_stock' : 'in_stock');
     setFormImage(p.image);
@@ -264,13 +277,23 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
     setErrorMessage(null);
 
     const numericPrice = typeof formPrice === 'number' ? formPrice : parseFloat(String(formPrice));
+    const parsedOriginalPrice =
+      formOriginalPrice !== '' && !isNaN(Number(formOriginalPrice)) ? parseFloat(String(formOriginalPrice)) : undefined;
+    const numericOriginalPrice =
+      parsedOriginalPrice && parsedOriginalPrice > numericPrice ? parsedOriginalPrice : undefined;
+    const discountPercent =
+      numericOriginalPrice && numericOriginalPrice > numericPrice
+        ? Math.round(((numericOriginalPrice - numericPrice) / numericOriginalPrice) * 100)
+        : undefined;
 
-    // Core columns only: name, price, description, image, category, stock_status
+    // Core columns + discount metadata
     const productPayload: Partial<Product> & { id?: string } = {
       ...(editingProduct?.id ? { id: editingProduct.id } : {}),
       name: formName.trim(),
       category: formCategory,
       price: numericPrice,
+      originalPrice: numericOriginalPrice,
+      discountPercent: discountPercent,
       description: formDescription.trim(),
       image: formImage.trim(),
       stockStatus: formStockStatus,
@@ -280,24 +303,46 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
     try {
       if (isSupabaseConfigured) {
         const saved = await upsertProduct(productPayload);
+        if (saved.id && numericOriginalPrice) {
+          setStoredDiscount(saved.id, numericOriginalPrice);
+        } else if (saved.id) {
+          setStoredDiscount(saved.id, null);
+        }
         await loadProducts();
-        setSuccessToast(`Product "${saved.name}" saved to Supabase!`);
+        setSuccessToast(
+          numericOriginalPrice
+            ? `Product "${saved.name}" saved with ${discountPercent}% discount!`
+            : `Product "${saved.name}" saved to Supabase!`
+        );
       } else {
         // Update locally in demo mode
         if (editingProduct) {
+          setStoredDiscount(editingProduct.id, numericOriginalPrice ?? null);
           const updated = productsList.map((p) => (p.id === editingProduct.id ? { ...p, ...productPayload } : p));
           setProductsList(updated);
+          saveStoredDemoProducts(updated);
           onProductsUpdated?.(updated);
-          setSuccessToast(`Product "${formName}" updated (Demo Mode)!`);
+          setSuccessToast(
+            numericOriginalPrice
+              ? `Product "${formName}" updated with ${discountPercent}% discount (Demo Mode)!`
+              : `Product "${formName}" updated (Demo Mode)!`
+          );
         } else {
+          const newId = `prod_${Date.now()}`;
+          setStoredDiscount(newId, numericOriginalPrice ?? null);
           const newProd: Product = {
-            id: `prod_${Date.now()}`,
+            id: newId,
             ...productPayload,
           } as Product;
           const updated = [newProd, ...productsList];
           setProductsList(updated);
+          saveStoredDemoProducts(updated);
           onProductsUpdated?.(updated);
-          setSuccessToast(`New product "${formName}" created (Demo Mode)!`);
+          setSuccessToast(
+            numericOriginalPrice
+              ? `New product "${formName}" created with ${discountPercent}% discount (Demo Mode)!`
+              : `New product "${formName}" created (Demo Mode)!`
+          );
         }
       }
       setIsFormOpen(false);
@@ -324,6 +369,7 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
       } else {
         const updated = productsList.filter((p) => p.id !== deletingId);
         setProductsList(updated);
+        saveStoredDemoProducts(updated);
         onProductsUpdated?.(updated);
         setSuccessToast('Product deleted (Demo Mode).');
       }
@@ -352,6 +398,9 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
     (p) => p.stockStatus === 'in_stock' || (p.stockStatus !== 'out_of_stock' && p.inStock !== false)
   ).length;
   const outOfStockCount = productsList.length - inStockCount;
+  const onSaleCount = productsList.filter(
+    (p) => p.originalPrice && Number(p.originalPrice) > Number(p.price)
+  ).length;
   const avgPrice = productsList.length
     ? (productsList.reduce((sum, p) => sum + p.price, 0) / productsList.length).toFixed(2)
     : '0.00';
@@ -555,8 +604,8 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
           /* ==================================================== */
           <div className="space-y-6">
             {/* Top Metrics Row */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="p-4 rounded-2xl bg-[#0e131d] border border-cyan-950/60 flex items-center gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4">
+              <div className="p-4 rounded-2xl bg-[#0e131d] border border-cyan-950/60 flex items-center gap-3.5">
                 <div className="p-3 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
                   <Package className="w-5 h-5" />
                 </div>
@@ -566,7 +615,7 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
                 </div>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#0e131d] border border-cyan-950/60 flex items-center gap-4">
+              <div className="p-4 rounded-2xl bg-[#0e131d] border border-cyan-950/60 flex items-center gap-3.5">
                 <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                   <CheckCircle2 className="w-5 h-5" />
                 </div>
@@ -576,7 +625,17 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
                 </div>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#0e131d] border border-cyan-950/60 flex items-center gap-4">
+              <div className="p-4 rounded-2xl bg-[#0e131d] border border-cyan-950/60 flex items-center gap-3.5">
+                <div className="p-3 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                  <Flame className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className="text-xs text-slate-400 font-medium block">On Discount</span>
+                  <span className="text-2xl font-bold text-rose-400 tracking-tight">{onSaleCount}</span>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-[#0e131d] border border-cyan-950/60 flex items-center gap-3.5">
                 <div className="p-3 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
                   <ShieldAlert className="w-5 h-5" />
                 </div>
@@ -586,7 +645,7 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
                 </div>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#0e131d] border border-cyan-950/60 flex items-center gap-4">
+              <div className="p-4 rounded-2xl bg-[#0e131d] border border-cyan-950/60 flex items-center gap-3.5">
                 <div className="p-3 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
                   <DollarSign className="w-5 h-5" />
                 </div>
@@ -743,12 +802,21 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
 
                           {/* Price */}
                           <td className="py-3 px-4 font-mono">
-                            <span className="text-cyan-400 font-bold">{Number(product.price).toFixed(2)} DH</span>
-                            {product.originalPrice ? (
-                              <span className="text-xs text-slate-500 line-through ml-2">
-                                {Number(product.originalPrice).toFixed(2)} DH
-                              </span>
-                            ) : null}
+                            <div className="flex flex-col">
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className="text-cyan-400 font-bold">{Number(product.price).toFixed(2)} DH</span>
+                                {product.originalPrice && Number(product.originalPrice) > Number(product.price) && (
+                                  <span className="text-[10px] font-bold text-rose-400 bg-rose-500/10 border border-rose-500/30 px-1.5 py-0.5 rounded">
+                                    -{Math.round(((Number(product.originalPrice) - Number(product.price)) / Number(product.originalPrice)) * 100)}%
+                                  </span>
+                                )}
+                              </div>
+                              {product.originalPrice && Number(product.originalPrice) > Number(product.price) && (
+                                <span className="text-[11px] text-slate-500 line-through">
+                                  {Number(product.originalPrice).toFixed(2)} DH
+                                </span>
+                              )}
+                            </div>
                           </td>
 
                           {/* Stock status */}
@@ -868,36 +936,132 @@ export function AdminPanel({ onBackToStore, onProductsUpdated }: AdminPanelProps
                   </div>
                 </div>
 
-                {/* Price & Stock Status (Core DB Columns: price, stock_status) */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">
-                      Price (DH) <span className="text-rose-400">*</span>
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={formPrice}
-                      onChange={(e) => setFormPrice(e.target.value)}
-                      placeholder="99.99"
-                      required
-                      className="w-full px-3.5 py-2 rounded-xl bg-[#080b11] border border-slate-800 text-sm text-white focus:outline-none focus:border-cyan-500 font-mono"
-                    />
+                {/* Pricing & Discount Configuration */}
+                <div className="p-4 rounded-xl bg-[#080b11] border border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-slate-200 flex items-center gap-1.5">
+                      <Tag className="w-3.5 h-3.5 text-cyan-400" />
+                      <span>Pricing & Discount</span>
+                    </span>
+                    {formPrice !== '' && formOriginalPrice !== '' && Number(formOriginalPrice) > Number(formPrice) && (
+                      <span className="text-[11px] font-bold text-rose-400 bg-rose-500/10 border border-rose-500/30 px-2 py-0.5 rounded font-mono">
+                        SAVE {Math.round(((Number(formOriginalPrice) - Number(formPrice)) / Number(formOriginalPrice)) * 100)}%
+                      </span>
+                    )}
                   </div>
 
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">
-                      Stock Status <span className="text-slate-500 font-mono text-[10px]">(stock_status)</span>
-                    </label>
-                    <select
-                      value={formStockStatus}
-                      onChange={(e) => setFormStockStatus(e.target.value as 'in_stock' | 'out_of_stock')}
-                      className="w-full px-3.5 py-2 rounded-xl bg-[#080b11] border border-slate-800 text-sm text-white focus:outline-none focus:border-cyan-500"
-                    >
-                      <option value="in_stock">In Stock (in_stock)</option>
-                      <option value="out_of_stock">Out of Stock (out_of_stock)</option>
-                    </select>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Selling Price */}
+                    <div>
+                      <label className="block text-xs font-medium text-slate-300 mb-1">
+                        Selling Price (DH) <span className="text-rose-400">*</span>
+                      </label>
+                      <div className="relative">
+                        <input
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          value={formPrice}
+                          onChange={(e) => setFormPrice(e.target.value)}
+                          placeholder="99.99"
+                          required
+                          className="w-full px-3.5 py-2 rounded-xl bg-[#0e131d] border border-slate-800 text-sm text-white focus:outline-none focus:border-cyan-500 font-mono pr-12"
+                        />
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-cyan-400 font-mono pointer-events-none">
+                          DH
+                        </span>
+                      </div>
+                      <span className="text-[10px] text-slate-500 mt-1 block">Final price shown to customers</span>
+                    </div>
+
+                    {/* Original / Normal Price */}
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="text-xs font-medium text-slate-300">
+                          Original Price (DH)
+                        </label>
+                        {formOriginalPrice !== '' && (
+                          <button
+                            type="button"
+                            onClick={() => setFormOriginalPrice('')}
+                            className="text-[10px] text-slate-500 hover:text-rose-400 transition-colors cursor-pointer"
+                          >
+                            Clear discount
+                          </button>
+                        )}
+                      </div>
+                      <div className="relative">
+                        <input
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          value={formOriginalPrice}
+                          onChange={(e) => setFormOriginalPrice(e.target.value)}
+                          placeholder="e.g. 149.99 (Optional)"
+                          className="w-full px-3.5 py-2 rounded-xl bg-[#0e131d] border border-slate-800 text-sm text-white focus:outline-none focus:border-cyan-500 font-mono pr-12"
+                        />
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-500 font-mono pointer-events-none">
+                          DH
+                        </span>
+                      </div>
+                      <span className="text-[10px] text-slate-500 mt-1 block">Regular crossed-out price before discount</span>
+                    </div>
                   </div>
+
+                  {/* Quick percentage presets */}
+                  {formPrice !== '' && Number(formPrice) > 0 && (
+                    <div className="pt-1.5 border-t border-slate-800/80">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="text-[10px] text-slate-400 font-medium">Quick Discount Presets:</span>
+                        {[10, 15, 20, 25, 30, 40, 50].map((percent) => (
+                          <button
+                            key={percent}
+                            type="button"
+                            onClick={() => {
+                              const currentPrice = Number(formPrice);
+                              const computedOriginal = Math.round(currentPrice / (1 - percent / 100));
+                              setFormOriginalPrice(computedOriginal);
+                            }}
+                            className="px-2 py-0.5 rounded-md bg-slate-800 hover:bg-cyan-950 hover:text-cyan-300 border border-slate-700/60 text-[10px] font-mono text-slate-300 transition-colors cursor-pointer"
+                          >
+                            +{percent}%
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Live Discount Summary Banner */}
+                  {formPrice !== '' && formOriginalPrice !== '' && Number(formOriginalPrice) > Number(formPrice) && (
+                    <div className="flex items-center gap-2 p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs">
+                      <Flame className="w-4 h-4 text-rose-400 shrink-0" />
+                      <span className="font-semibold">Discount Active:</span>
+                      <span>
+                        Customers save <strong className="text-white font-mono">{(Number(formOriginalPrice) - Number(formPrice)).toFixed(2)} DH</strong> ({Math.round(((Number(formOriginalPrice) - Number(formPrice)) / Number(formOriginalPrice)) * 100)}% OFF).
+                      </span>
+                    </div>
+                  )}
+
+                  {formOriginalPrice !== '' && Number(formOriginalPrice) > 0 && Number(formOriginalPrice) <= Number(formPrice) && (
+                    <p className="text-[11px] text-amber-400">
+                      ⚠️ Note: To show a discount, the original price must be higher than the selling price.
+                    </p>
+                  )}
+                </div>
+
+                {/* Stock Status */}
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                    Stock Status <span className="text-slate-500 font-mono text-[10px]">(stock_status)</span>
+                  </label>
+                  <select
+                    value={formStockStatus}
+                    onChange={(e) => setFormStockStatus(e.target.value as 'in_stock' | 'out_of_stock')}
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#080b11] border border-slate-800 text-sm text-white focus:outline-none focus:border-cyan-500"
+                  >
+                    <option value="in_stock">In Stock (in_stock)</option>
+                    <option value="out_of_stock">Out of Stock (out_of_stock)</option>
+                  </select>
                 </div>
 
                 {/* Image Section: Upload to Supabase Storage 'product-images' bucket */}

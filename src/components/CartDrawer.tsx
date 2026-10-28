@@ -157,9 +157,16 @@ export function CartDrawer({
                           <span className="font-tech text-[10px] text-zinc-400 uppercase block">
                             {item.product.category}
                           </span>
-                          <span className="font-display text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-[#00f0ff] via-sky-300 to-white mt-0.5 block">
-                            {item.product.price} <span className="font-tech text-xs font-bold text-[#00f0ff]">DH</span>
-                          </span>
+                          <div className="flex items-baseline gap-2 mt-0.5">
+                            <span className="font-display text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-[#00f0ff] via-sky-300 to-white">
+                              {item.product.price} <span className="font-tech text-xs font-bold text-[#00f0ff]">DH</span>
+                            </span>
+                            {item.product.originalPrice && Number(item.product.originalPrice) > Number(item.product.price) && (
+                              <span className="font-tech text-[10px] text-zinc-500 line-through">
+                                {item.product.originalPrice} DH
+                              </span>
+                            )}
+                          </div>
                         </div>
 
                         <div className="flex flex-col items-end gap-2 flex-shrink-0">

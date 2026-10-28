@@ -40,7 +40,12 @@ export function ProductCard({
       </div>
 
       {/* Badge */}
-      <div className="absolute left-3 top-3 z-20 flex flex-col gap-1">
+      <div className="absolute left-3 top-3 z-20 flex flex-col gap-1 items-start">
+        {product.originalPrice && Number(product.originalPrice) > Number(product.price) && (
+          <span className="inline-flex items-center gap-1 rounded-md bg-gradient-to-r from-rose-600 to-red-600 text-white px-2 py-0.5 font-tech text-[9px] sm:text-[10px] font-bold uppercase tracking-wider shadow-[0_0_12px_rgba(225,29,72,0.6)] border border-rose-400/40 backdrop-blur-md">
+            SAVE {Math.round(((Number(product.originalPrice) - Number(product.price)) / Number(product.originalPrice)) * 100)}%
+          </span>
+        )}
         {product.badge ? (
           <span className="inline-flex items-center rounded-md bg-[#00f0ff]/20 border border-[#00f0ff]/50 px-2 py-0.5 font-tech text-[10px] font-bold uppercase tracking-wider text-[#00f0ff] backdrop-blur-md">
             {product.badge}
@@ -119,7 +124,7 @@ export function ProductCard({
             <span className="font-tech text-[10px] sm:text-xs font-bold text-[#00f0ff]">
               DH
             </span>
-            {product.originalPrice && (
+            {product.originalPrice && Number(product.originalPrice) > Number(product.price) && (
               <span className="font-tech text-[10px] sm:text-xs font-medium text-zinc-500 line-through ml-1">
                 {product.originalPrice} DH
               </span>

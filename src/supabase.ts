@@ -40,9 +40,66 @@ export interface SupabaseProductCorePayload {
   stock_status: string;
 }
 
+const DISCOUNTS_STORAGE_KEY = 'maghreb_pc_product_discounts';
+
 /**
- * Maps Supabase DB row to frontend Product model.
- * Completely ignores discount_percent, in_stock, and reviews_count.
+ * Retrieve discounts saved locally (supports demo mode & Supabase instances without custom columns)
+ */
+export function getStoredDiscounts(): Record<string, number> {
+  if (typeof window === 'undefined') return {};
+  try {
+    const raw = localStorage.getItem(DISCOUNTS_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+/**
+ * Save or remove a product's discount (originalPrice)
+ */
+export function setStoredDiscount(productId: string, originalPrice?: number | null): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const current = getStoredDiscounts();
+    if (originalPrice && originalPrice > 0) {
+      current[productId] = originalPrice;
+    } else {
+      delete current[productId];
+    }
+    localStorage.setItem(DISCOUNTS_STORAGE_KEY, JSON.stringify(current));
+  } catch {
+    // ignore
+  }
+}
+
+const DEMO_PRODUCTS_KEY = 'maghreb_pc_demo_products';
+
+export function getStoredDemoProducts(): Product[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = localStorage.getItem(DEMO_PRODUCTS_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch {
+    // ignore
+  }
+  return [];
+}
+
+export function saveStoredDemoProducts(prods: Product[]): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(DEMO_PRODUCTS_KEY, JSON.stringify(prods));
+  } catch {
+    // ignore
+  }
+}
+
+/**
+ * Maps Supabase DB row to frontend Product model, with full discount support.
  */
 export function mapSupabaseRowToProduct(row: any): Product {
   const price = typeof row.price === 'number' ? row.price : parseFloat(row.price) || 0;
@@ -54,12 +111,25 @@ export function mapSupabaseRowToProduct(row: any): Product {
     : true;
   const normalizedStatus = rawStatus ? (isInStock ? 'in_stock' : 'out_of_stock') : 'in_stock';
 
+  // Retrieve discount original price from row or stored discount registry
+  const idStr = String(row.id);
+  const storedDiscounts = getStoredDiscounts();
+  const rawOriginalPrice = row.original_price ?? row.originalPrice ?? storedDiscounts[idStr];
+  const originalPrice =
+    rawOriginalPrice != null && Number(rawOriginalPrice) > 0 ? Number(rawOriginalPrice) : undefined;
+  const discountPercent =
+    originalPrice && originalPrice > price
+      ? Math.round(((originalPrice - price) / originalPrice) * 100)
+      : undefined;
+
   return {
-    id: String(row.id),
+    id: idStr,
     name: row.name || 'Untitled Product',
     fullName: row.name || 'Untitled Product',
     tagline: '',
     price,
+    originalPrice,
+    discountPercent,
     category: row.category || 'Gear',
     image: row.image || '/attack-shark-x11-dock.jpg',
     description: row.description || '',
@@ -73,7 +143,6 @@ export function mapSupabaseRowToProduct(row: any): Product {
 /**
  * Maps frontend Product model to Supabase DB row format.
  * ONLY includes the actual core columns: name, price, description, image, category, stock_status.
- * No references to discount_percent, in_stock, or reviews_count are ever sent.
  */
 export function mapProductToSupabaseRow(product: Partial<Product>): SupabaseProductCorePayload {
   // Normalize stock_status to 'in_stock' or 'out_of_stock'
@@ -141,6 +210,8 @@ export async function upsertProduct(product: Partial<Product> & { id?: string })
 
   // If this is an existing database record, perform an UPDATE
   if (product.id && !product.id.startsWith('prod_demo_') && !product.id.startsWith('prod_temp_')) {
+    setStoredDiscount(product.id, product.originalPrice);
+
     const { data, error } = await supabase
       .from('products')
       .update(rowData)
@@ -178,7 +249,14 @@ export async function upsertProduct(product: Partial<Product> & { id?: string })
       .select()
       .single();
     if (fallback.error) throw fallback.error;
+    if (fallback.data?.id && product.originalPrice) {
+      setStoredDiscount(String(fallback.data.id), product.originalPrice);
+    }
     return mapSupabaseRowToProduct(fallback.data);
+  }
+
+  if (data?.id && product.originalPrice) {
+    setStoredDiscount(String(data.id), product.originalPrice);
   }
 
   return mapSupabaseRowToProduct(data);
@@ -188,6 +266,8 @@ export async function upsertProduct(product: Partial<Product> & { id?: string })
  * Delete a product from Supabase 'products' table by ID.
  */
 export async function deleteProduct(id: string): Promise<void> {
+  setStoredDiscount(id, null);
+
   if (!isSupabaseConfigured) {
     throw new Error('Supabase is not configured.');
   }

@@ -13,7 +13,7 @@ import { UserModal } from './components/UserModal';
 import { AdminPanel } from './components/AdminPanel';
 import { products } from './data';
 import { CartItem, Product } from './types';
-import { fetchProducts, isSupabaseConfigured } from './supabase';
+import { fetchProducts, isSupabaseConfigured, getStoredDemoProducts } from './supabase';
 
 // Cart starts empty; only contains items the user adds
 const DEFAULT_CART: CartItem[] = [];
@@ -67,15 +67,22 @@ export default function App() {
         try {
           setIsFetchingFromSupabase(true);
           const remoteProducts = await fetchProducts();
-          setAllProducts(remoteProducts || []);
+          if (remoteProducts && remoteProducts.length > 0) {
+            setAllProducts(remoteProducts);
+          } else {
+            const local = getStoredDemoProducts();
+            setAllProducts(local);
+          }
         } catch (err) {
           console.error('Could not fetch products from Supabase:', err);
-          setAllProducts([]);
+          const local = getStoredDemoProducts();
+          setAllProducts(local);
         } finally {
           setIsFetchingFromSupabase(false);
         }
       } else {
-        setAllProducts([]);
+        const local = getStoredDemoProducts();
+        setAllProducts(local);
         setIsFetchingFromSupabase(false);
       }
     }

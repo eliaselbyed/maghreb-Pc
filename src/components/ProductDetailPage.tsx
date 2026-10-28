@@ -84,9 +84,10 @@ export function ProductDetailPage({
     return `https://wa.me/212770519490?text=${encodeURIComponent(message)}`;
   };
 
-  const displaySavings = product.originalPrice
-    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
-    : product.discountPercent;
+  const displaySavings =
+    product.originalPrice && Number(product.originalPrice) > Number(product.price)
+      ? Math.round(((Number(product.originalPrice) - Number(product.price)) / Number(product.originalPrice)) * 100)
+      : product.discountPercent;
 
   return (
     <motion.div
@@ -307,9 +308,9 @@ export function ProductDetailPage({
                       DH
                     </span>
 
-                    {product.originalPrice && (
+                    {product.originalPrice && Number(product.originalPrice) > Number(product.price) && (
                       <div className="ml-3 flex flex-col font-tech">
-                        <span className="text-[10px] uppercase tracking-wider text-zinc-500">MSRP</span>
+                        <span className="text-[10px] uppercase tracking-wider text-zinc-500">Regular Price</span>
                         <span className="text-sm font-medium text-zinc-500 line-through">
                           {product.originalPrice} DH
                         </span>
