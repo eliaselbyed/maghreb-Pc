@@ -33,14 +33,14 @@ export function Hero({ featuredProduct, onSelectProduct }: HeroProps) {
 
         {/* Text & Action Overlay with new esports fonts and vibrant vibe */}
         <div className="relative z-10 w-full mx-auto max-w-7xl px-5 sm:px-8 lg:px-12 py-10 sm:py-16">
-          <div className="max-w-md sm:max-w-lg lg:max-w-2xl">
+          <div className="max-w-md sm:max-w-lg lg:max-w-2xl mx-auto sm:mx-0">
             {/* Tech tag */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00f0ff]/10 border border-[#00f0ff]/30 text-[10px] sm:text-xs font-tech font-bold uppercase tracking-widest text-[#00f0ff] mb-3 backdrop-blur-md">
+            <div className="w-fit mx-auto sm:mx-0 flex sm:inline-flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-[#00f0ff]/10 border border-[#00f0ff]/30 text-[10px] sm:text-xs font-tech font-bold uppercase tracking-widest text-[#00f0ff] mb-3 backdrop-blur-md">
               <span className="h-1.5 w-1.5 rounded-full bg-[#00f0ff] animate-ping" />
               <span>MOROCCO ESPORTS GEAR HEADQUARTERS</span>
             </div>
 
-            <h1 className="font-display text-2xl xs:text-3xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight text-white leading-tight sm:leading-[0.95] whitespace-nowrap">
+            <h1 className="font-display text-2xl xs:text-3xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight text-white leading-tight sm:leading-[0.95] whitespace-nowrap text-center sm:text-left">
               DOMINATE{' '}
               <span className="bg-gradient-to-r from-[#00f0ff] via-sky-300 to-[#a855f7] bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(0,240,255,0.4)]">
                 THE GAME
